@@ -6,6 +6,7 @@ from selenium.common.exceptions import *
 
 
 class CustomMethodForMethodsProvidedBySeleniumClass:
+
     def __init__(self, driver):
         self.driver = driver
 
@@ -19,24 +20,24 @@ class CustomMethodForMethodsProvidedBySeleniumClass:
             return By.XPATH
         elif locatorType == "css":
             return By.CSS_SELECTOR
-        elif locatorType == "classname":
+        elif locatorType == "class":
             return By.CLASS_NAME
-        elif locatorType == "linktext":
+        elif locatorType == "link":
             return By.LINK_TEXT
         else:
             print("Locator type " + locatorType + " not correct/supported")
         return False
 
-    def getElement(self, locator, locatoType="id"):
+    def getElement(self, locator, locatorType="id"):
         element = None
         try:
-            locatoType = locatoType.lower()
-            byType = self.getByType(locatoType)
-            if __name__ == '__main__':
-                element = self.driver.find_element(byType, locator)
-            print("Element Found")
+            locatorType = locatorType.lower()
+            byType = self.getByType(locatorType)
+            element = self.driver.find_element(byType, locator)
+            print("Element Found with locator: " + locator + " and  locatorType: " + locatorType)
         except:
-            print("Element Not Found")
+            print("Element not found with locator: " + locator + " and  locatorType: " + locatorType)
+        return element
 
     def elementClick(self, locator, locatorType="id"):
         try:
@@ -47,9 +48,19 @@ class CustomMethodForMethodsProvidedBySeleniumClass:
             print("Cannot click on the element with locator: " + locator + " locatorType: " + locatorType)
             print_stack()
 
-    def isElementPresent(self, locator, byType):
+    def sendKeys(self, data, locator, locatorType="id"):
         try:
-            element = self.driver.find_element(byType, locator)
+            element = self.getElement(locator, locatorType)
+            element.send_keys(data)
+            print("Sent data on element with locator: " + locator + " locatorType: " + locatorType)
+        except:
+            print("Cannot send data on the element with locator: " + locator +
+                  " locatorType: " + locatorType)
+            print_stack()
+
+    def isElementPresent(self, locator, locatorType="id"):
+        try:
+            element = self.getElement(locator, locatorType)
             if element is not None:
                 print("Element Found")
                 return True
@@ -80,12 +91,11 @@ class CustomMethodForMethodsProvidedBySeleniumClass:
             byType = self.getByType(locatorType)
             print("Waiting for maximum :: " + str(timeout) +
                   " :: seconds for element to be clickable")
-            wait = WebDriverWait(self.driver, 10, poll_frequency=1,
+            wait = WebDriverWait(self.driver, timeout, poll_frequency=pollFrequency,
                                  ignored_exceptions=[NoSuchElementException,
                                                      ElementNotVisibleException,
                                                      ElementNotSelectableException])
-            element = wait.until(EC.element_to_be_clickable((byType,
-                                                             "stopFilter_stops-0")))
+            element = wait.until(EC.element_to_be_clickable((byType, locator)))
             print("Element appeared on the web page")
         except:
             print("Element not appeared on the web page")
