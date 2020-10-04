@@ -8,10 +8,14 @@ import logging
 
 
 class CustomMethodForMethodsProvidedBySeleniumClass:
+
     log = cl.customLogger(logging.DEBUG)
 
     def __init__(self, driver):
         self.driver = driver
+
+    def getTitle(self):
+        return self.driver.title
 
     def getByType(self, locatorType):
         locatorType = locatorType.lower()
@@ -64,7 +68,7 @@ class CustomMethodForMethodsProvidedBySeleniumClass:
                           " locatorType: " + locatorType)
         except:
             self.log.info("Cannot send data on the element with locator: " + locator +
-                          " locatorType: " + locatorType)
+                  " locatorType: " + locatorType)
             print_stack()
 
     def isElementPresent(self, locator, locatorType="id"):
@@ -94,12 +98,12 @@ class CustomMethodForMethodsProvidedBySeleniumClass:
             return False
 
     def waitForElement(self, locator, locatorType="id",
-                       timeout=10, pollFrequency=0.5):
+                               timeout=10, pollFrequency=0.5):
         element = None
         try:
             byType = self.getByType(locatorType)
             self.log.info("Waiting for maximum :: " + str(timeout) +
-                          " :: seconds for element to be clickable")
+                  " :: seconds for element to be clickable")
             wait = WebDriverWait(self.driver, 10, poll_frequency=1,
                                  ignored_exceptions=[NoSuchElementException,
                                                      ElementNotVisibleException,
