@@ -5,6 +5,7 @@ import logging
 
 
 class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
+
     log = cl.CustomLogger(logging.DEBUG)
 
     def __init__(self, driver):
@@ -17,7 +18,7 @@ class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
     _password_field = "user_password"
     _login_button = "commit"
 
-    def clickOnLoginLink(self):
+    def clickLoginLink(self):
         self.elementClick(self._login_link, locatorType="link")
 
     def enterEmail(self, email):
@@ -26,23 +27,23 @@ class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
     def enterPassword(self, password):
         self.sendKeys(password, self._password_field)
 
-    def clickOnLoginButton(self):
-        self.elementClick(self._login_button, locatorType="Name")
+    def clickLoginButton(self):
+        self.elementClick(self._login_button, locatorType="name")
 
     def login(self, email="", password=""):
-        self.clickOnLoginLink()
-        self.clearFields()
+        self.clickLoginLink()
         self.enterEmail(email)
         self.enterPassword(password)
-        self.clickOnLoginButton()
+        self.clickLoginButton()
 
     def verifyLoginSuccessful(self):
         result = self.isElementPresent("//*[@id='navbar']//span[text()='User Settings']",
                                        locatorType="xpath")
         return result
 
-    def clearFields(self):
-        emailField = self.getElement(locator=self._email_field)
-        emailField.clear()
-        passwordField = self.getElement(locator=self._password_field)
-        passwordField.clear()
+    def verifyLoginFailed(self):
+        result = self.isElementPresent("//div[contains(text(),'Invalid email or password')]",
+                                       locatorType="xpath")
+        return result
+
+
