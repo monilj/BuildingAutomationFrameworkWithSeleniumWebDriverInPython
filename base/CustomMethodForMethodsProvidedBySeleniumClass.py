@@ -8,7 +8,7 @@ import logging
 
 
 class CustomMethodForMethodsProvidedBySeleniumClass:
-    log = cl.customLogger(logging.DEBUG)
+    log = cl.CustomLogger(logging.DEBUG)
 
     def __init__(self, driver):
         self.driver = driver

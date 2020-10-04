@@ -29,8 +29,20 @@ class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
     def clickOnLoginButton(self):
         self.elementClick(self._login_button, locatorType="Name")
 
-    def login(self, email, password):
+    def login(self, email="", password=""):
         self.clickOnLoginLink()
+        self.clearFields()
         self.enterEmail(email)
         self.enterPassword(password)
         self.clickOnLoginButton()
+
+    def verifyLoginSuccessful(self):
+        result = self.isElementPresent("//*[@id='navbar']//span[text()='User Settings']",
+                                       locatorType="xpath")
+        return result
+
+    def clearFields(self):
+        emailField = self.getElement(locator=self._email_field)
+        emailField.clear()
+        passwordField = self.getElement(locator=self._password_field)
+        passwordField.clear()
