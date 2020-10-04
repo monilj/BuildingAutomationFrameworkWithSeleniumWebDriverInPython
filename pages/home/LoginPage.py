@@ -1,11 +1,10 @@
-from selenium.webdriver.common.by import By
-from base.CustomMethodForMethodsProvidedBySeleniumClass import CustomMethodForMethodsProvidedBySeleniumClass
 import utilities.custom_logger as cl
 import logging
+from base.BasePage import BasePage
 
 
-class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
-    log = cl.customLogger(logging.DEBUG)
+class LoginPage(BasePage):
+    log = cl.CustomLogger(logging.DEBUG)
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -45,8 +44,5 @@ class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
                                        locatorType="xpath")
         return result
 
-    def verifyTitle(self):
-        if "Google" in self.getTitle():
-            return True
-        else:
-            return False
+    def verifyLoginTitle(self):
+        return self.verifyPageTitle("Google")

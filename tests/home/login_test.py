@@ -1,7 +1,4 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import time
-from webdriver_manager.chrome import ChromeDriverManager
+
 from pages.home.LoginPage import LoginPage
 import unittest
 import pytest
@@ -19,10 +16,10 @@ class LoginTests(unittest.TestCase):
     @pytest.mark.run(order=2)
     def test_validLogin(self):
         self.lp.login("test@email.com", "abcabc")
-        result1 = self.lp.verifyTitle()
-        self.ts.mark(result1, "Title Verified")
+        result1 = self.lp.verifyLoginTitle()
+        self.ts.mark(result1, "Title Verification")
         result2 = self.lp.verifyLoginSuccessful()
-        self.ts.markFinal("test_validLogin", result2, "Login was successful")
+        self.ts.markFinal("test_validLogin", result2, "Login Verification")
 
     @pytest.mark.run(order=1)
     def test_invalidLogin(self):
