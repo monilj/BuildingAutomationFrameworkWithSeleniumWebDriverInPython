@@ -5,8 +5,7 @@ import logging
 
 
 class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
-
-    log = cl.CustomLogger(logging.DEBUG)
+    log = cl.customLogger(logging.DEBUG)
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -45,5 +44,4 @@ class LoginPage(CustomMethodForMethodsProvidedBySeleniumClass):
         result = self.isElementPresent("//div[contains(text(),'Invalid email or password')]",
                                        locatorType="xpath")
         return result
-
 

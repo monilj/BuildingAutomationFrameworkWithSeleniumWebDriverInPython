@@ -1,12 +1,10 @@
 import pytest
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-
+from base.WebdriverFactory import WebDriverFactory
 
 @pytest.yield_fixture()
 def setUp():
-    print("Running method level setup")
+    print("Running method level setUp")
     yield
     print("Running method level tearDown")
 
@@ -14,18 +12,8 @@ def setUp():
 @pytest.yield_fixture(scope="class")
 def oneTimeSetUp(request, browser):
     print("Running one time setUp")
-    if browser == 'firefox':
-        baseURL = "https://letskodeit.teachable.com/"
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
-        driver.maximize_window()
-        driver.implicitly_wait(3)
-        driver.get(baseURL)
-        print("Running tests on FF")
-    else:
-        baseURL = "https://letskodeit.teachable.com/"
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(baseURL)
-        print("Running tests on chrome")
+    wdf = WebDriverFactory(browser)
+    driver = wdf.getWebDriverInstance()
 
     if request.cls is not None:
         request.cls.driver = driver
@@ -34,16 +22,13 @@ def oneTimeSetUp(request, browser):
     driver.quit()
     print("Running one time tearDown")
 
-
 def pytest_addoption(parser):
     parser.addoption("--browser")
     parser.addoption("--osType", help="Type of operating system")
 
-
 @pytest.fixture(scope="session")
 def browser(request):
     return request.config.getoption("--browser")
-
 
 @pytest.fixture(scope="session")
 def osType(request):
